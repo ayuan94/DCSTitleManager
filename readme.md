@@ -42,7 +42,7 @@
 ]
 ```
 
-​	上面的配置等效于：/team modify 1 prefix {"text":"[星期六] ","color":"red","bold":true} 显示效果为：![titleEG](img/titleEG.png)
+​	上面的配置等效于：/team modify 1 prefix {"text":"[星期六] ","color":"red","bold":true} 显示效果为：![titleEG](/title_plugin/img/titleEG.png)
 
 ​	```	/team modify 称号id prefix {"text":"称号名字","color":"称号颜色","bold":是否加粗}```
 
