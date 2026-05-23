@@ -1,11 +1,11 @@
  {
-	"id": "example_plugin",
-	"version": "1.1.0",
-	"name": "Example Plugin",
-	"description": "Example plugin for MCDR",
-	"author": "Fallen_Breath",
-	"link": "https://github.com/MCDReforged/ExamplePlugin",
+	"id": "title_manager",
+	"version": "0.0.1",
+	"name": "DCS Title Manager",
+	"description": "DCSTitleManager 称号管理插件，方便玩家能自行修改佩戴的称号",
+	"author": "DCS",
+	"link": "https://github.com/ayuan94/DCSTitleManager",
 	"dependencies": {
-		"mcdreforged": ">=2.15.0"
+		"mcdreforged": ">=2.14.0"
 	}
 }

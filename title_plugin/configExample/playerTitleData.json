@@ -1,0 +1,14 @@
+[
+  {
+    "playerName": "playerNameA",
+    "titleId": "1"
+  },
+  {
+    "playerName": "playerNameA",
+    "titleId": "2"
+  },
+  {
+    "playerName": "playerNameB",
+    "titleId": "2"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "name": "你好",
+    "color": "red",
+    "bold": "true"
+  },
+  {
+    "id": "2",
+    "name": "再见",
+    "color": "#FFF",
+    "bold": "false"
+  }
+]
