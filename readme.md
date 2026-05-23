@@ -4,15 +4,13 @@
 
 #### 功能概述：方便玩家能自行修改佩戴的称号。
 
-- **玩家命令**
-    - ```!!title [help|list <page>|set <id>|leave]```
+- **玩家命令** ```!!title [help|list <page>|set <id>|leave]```
     - ```!!title/!!title help``` 帮助界面，展示所有功能
     - ```!!title list <page>``` 展示当前玩家所拥有的称号
     - ```!!title set <id>``` 给当前玩家设置该称号
     - ```!!title leave``` 解除当前玩家佩戴的称号
 
-- **管理命令**
-    - ```!!title [add|remove <id>|join|give|delete|show <all|playerName|id>]```
+- **管理命令** ```!!title [add|remove <id>|join|give|delete|show <all|playerName|id>]```
     - ```!!title add <id> <name> <color> <bold>``` 创建新称号
     - ```!!title remove <id>``` 删除对应id的称号
     - ```!!title join <playerName> <id>``` 手动配置并加入某称号给玩家
