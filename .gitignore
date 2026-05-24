@@ -6,3 +6,4 @@
 *.mcdr
 /configExample/
 /.qoder/
+/.venv/
