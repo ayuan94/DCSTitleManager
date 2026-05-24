@@ -25,10 +25,23 @@ _COLOR_MAP = {
 ADMIN_PERM = 2
 
 
+def _resolve_color(color: str) -> RColor:
+    """将颜色字符串解析为 RColor，支持名称和十六进制"""
+    lower = color.lower()
+    if lower in _COLOR_MAP:
+        return _COLOR_MAP[lower]
+    # 十六进制颜色: #RGB 或 #RRGGBB
+    if lower.startswith('#'):
+        try:
+            return RColor.from_mc_value(lower)
+        except (ValueError, TypeError):
+            pass
+    return RColor.white
+
+
 def _format_title(name: str, color: str, bold: bool) -> RText:
     """创建带颜色和格式的称号 RText"""
-    c = _COLOR_MAP.get(color.lower(), RColor.white)
-    text = RText(name, c)
+    text = RText(name, _resolve_color(color))
     if bold:
         text.set_styles(RStyle.bold)
     return text
@@ -72,18 +85,18 @@ class TitleManager:
         source.reply(RText('[ 玩家命令 ]', RColor.yellow))
         source.reply('  !!title help  - 显示帮助')
         source.reply('  !!title list [页码]  - 查看拥有的称号')
-        source.reply('  !!title set <id>  - 佩戴称号')
+        source.reply('  !!title set <titleId>  - 佩戴称号')
         source.reply('  !!title leave  - 解除佩戴的称号')
         if source.has_permission(ADMIN_PERM):
             source.reply(RText('[ 管理命令 ]', RColor.yellow))
-            source.reply('  !!title add <id> <名称> <颜色> <加粗>  - 创建称号')
-            source.reply('  !!title remove <id>  - 删除称号')
-            source.reply('  !!title join <玩家> <id>  - 配置并佩戴称号给玩家')
-            source.reply('  !!title give <玩家> <id>  - 赠予玩家称号(不佩戴)')
-            source.reply('  !!title delete <玩家> <id>  - 删除玩家称号')
+            source.reply('  !!title add <titleId> <名称> <颜色> <加粗>  - 创建称号')
+            source.reply('  !!title remove <titleId>  - 删除称号')
+            source.reply('  !!title join <玩家> <titleId>  - 配置并佩戴称号给玩家')
+            source.reply('  !!title give <玩家> <titleId>  - 赠予玩家称号(不佩戴)')
+            source.reply('  !!title delete <玩家> <titleId>  - 删除玩家称号')
             source.reply('  !!title show all  - 查看所有称号')
             source.reply('  !!title show player <玩家>  - 查看玩家称号')
-            source.reply('  !!title show id <id>  - 查看称号拥有者')
+            source.reply('  !!title show title <titleId>  - 查看称号拥有者')
             source.reply('  !!title move <旧玩家> <新玩家>  - 迁移玩家称号')
             source.reply('  !!title export  - 导出数据到Excel')
             source.reply('  !!title import  - 从Excel导入数据')
@@ -291,7 +304,7 @@ class TitleManager:
             name_text = _format_title(t['name'], t['color'], t['bold'] == 'true')
             # 称号名可点击查看拥有者
             name_text = name_text.h(f'点击查看拥有称号 [{t["id"]}] 的玩家').c(
-                RAction.suggest_command, f'!!title show id {t["id"]}'
+                RAction.suggest_command, f'!!title show title {t["id"]}'
             )
             source.reply(RTextList(
                 RText(f'  [{t["id"]}] ', RColor.white),
