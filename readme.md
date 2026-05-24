@@ -164,5 +164,6 @@ def on_load(server, prev_module):
 > 该 handler 用于修复含有称号前缀的玩家名解析，避免默认 `vanilla_handler` 在处理多个 `[]` 前缀时误判玩家名。
 > 
 > 请先安装并启用 `TitlePrefixHandler`，然后再加载本插件。
-> 
+
+> [!IMPORTANT]
 > 启用本插件前，建议清除服务器内所有已有 Team，避免冲突。
