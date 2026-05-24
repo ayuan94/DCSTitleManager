@@ -162,5 +162,7 @@ def on_load(server, prev_module):
     server.register_server_handler(TitlePrefixHandler())
 ```
 
+## tips
+
 > [!IMPORTANT]
-> 启用本插件前，建议清除服务器内所有已有 Team，避免冲突。
+> 启用本称号插件前，建议清除服务器内所有已有 Team，避免冲突。
