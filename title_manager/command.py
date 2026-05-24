@@ -3,7 +3,7 @@
 """
 
 from mcdreforged.api.types import PluginServerInterface, CommandSource
-from mcdreforged.api.command import Literal, Text, Integer, GreedyText
+from mcdreforged.api.command import Literal, Text, Integer
 
 from .title_manager import TitleManager, ADMIN_PERM
 
@@ -33,9 +33,9 @@ def register(server: PluginServerInterface, manager: TitleManager) -> None:
         # ---- 管理员命令 ----
         .then(Literal('add').requires(is_admin)
             .then(Text('titleId')
-                .then(Text('color')
-                    .then(Text('bold')
-                        .then(GreedyText('name').runs(
+                .then(Text('name')
+                    .then(Text('color')
+                        .then(Text('bold').runs(
                             lambda src, ctx: manager.cmd_add(
                                 src, ctx['titleId'], ctx['name'], ctx['color'], ctx['bold']
                             )

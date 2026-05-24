@@ -89,7 +89,7 @@ class TitleManager:
         source.reply('  !!title leave  - 解除佩戴的称号')
         if source.has_permission(ADMIN_PERM):
             source.reply(RText('[ 管理命令 ]', RColor.yellow))
-            source.reply('  !!title add <titleId> <颜色> <加粗> <名称>  - 创建称号')
+            source.reply('  !!title add <titleId> <名称> <颜色> <加粗>  - 创建称号(无需输入中括号)',)
             source.reply('  !!title remove <titleId>  - 删除称号')
             source.reply('  !!title join <玩家> <titleId>  - 配置并佩戴称号给玩家')
             source.reply('  !!title give <玩家> <titleId>  - 赠予玩家称号(不佩戴)')
@@ -219,9 +219,12 @@ class TitleManager:
             source.reply(RText(f'称号ID [{title_id}] 已存在', RColor.red))
             return
 
-        self.storage.add_title(title_id, name, color, bold)
-        self._create_team(title_id, name, color, bold)
-        name_text = _format_title(name, color, bold.lower() == 'true')
+        # 自动补齐中括号
+        display_name = f'[{name}]'
+
+        self.storage.add_title(title_id, display_name, color, bold)
+        self._create_team(title_id, display_name, color, bold)
+        name_text = _format_title(display_name, color, bold.lower() == 'true')
         source.reply(RTextList(RText(f'已创建称号 [{title_id}] ', RColor.green), name_text))
 
     def cmd_remove(self, source: CommandSource, title_id: str) -> None:
