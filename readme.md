@@ -1,75 +1,119 @@
-# DCSTitleManager 称号管理插件
+# DCSTitleManager
 
-####  插件名称：title_manager
+Minecraft 服务器称号管理 MCDR 插件，基于 Team 机制实现称号的前缀显示，玩家可自行切换佩戴。
 
-#### 功能概述：方便玩家能自行修改佩戴的称号。
+## 依赖
 
-- **玩家命令** ```!!title [help|list <page>|set <id>|leave]```
-    - ```!!title/!!title help``` 帮助界面，展示所有功能
-    - ```!!title list <page>``` 展示当前玩家所拥有的称号
-    - ```!!title set <id>``` 给当前玩家设置该称号
-    - ```!!title leave``` 解除当前玩家佩戴的称号
+| 依赖 | 版本 | 说明 |
+|---|---|---|
+| MCDReforged | >=2.14.0 | 核心框架 |
+| openpyxl | >=3.0.0 | 可选，导入导出功能需要 |
 
-- **管理命令** ```!!title [add|remove <id>|join|give|delete|show <all|playerName|id>]```
-    - ```!!title add <id> <name> <color> <bold>``` 创建新称号
-    - ```!!title remove <id>``` 删除对应id的称号
-    - ```!!title join <playerName> <id>``` 手动配置并加入某称号给玩家
-    - ```!!title give <playerName> <id>``` 给某玩家新增一个称号但不佩配置
-    - ```!!title delete <player> <id>``` 删除某玩家的某称号权限
-    - ```!!title show```
-        - ```all``` 展示当前服所有称号
-        - ```playerName``` 展示该玩家所有称号
-        - ```id``` 展示拥有该称号的所有玩家
-    - ```!!title move <oldPlayerName> <newPlayerName>``` 将改名前玩家的称号迁移到改名后玩家账户下
+## 命令
 
-    
+### 玩家命令
 
-#### 插件数据文件 /config
+| 命令 | 说明 |
+|---|---|
+| `!!title` | 显示帮助 |
+| `!!title help` | 显示帮助 |
+| `!!title list [页码]` | 查看拥有的称号 |
+| `!!title set <id>` | 佩戴称号 |
+| `!!title leave` | 解除佩戴 |
 
-##### 1. ```/config/title.json``` 存储称号的详细信息
+### 管理员命令
 
+| 命令 | 说明 |
+|---|---|
+| `!!title add <id> <名称> <颜色> <加粗>` | 创建称号 |
+| `!!title remove <id>` | 删除称号 |
+| `!!title join <玩家> <id>` | 赋予并佩戴 |
+| `!!title give <玩家> <id>` | 赋予（不佩戴） |
+| `!!title delete <玩家> <id>` | 移除玩家称号 |
+| `!!title show all` | 查看所有称号 |
+| `!!title show player <玩家>` | 查看玩家称号 |
+| `!!title show id <id>` | 查看称号拥有者 |
+| `!!title move <旧玩家> <新玩家>` | 迁移称号（改名） |
+| `!!title export` | 导出数据到 Excel |
+| `!!title import` | 从 Excel 导入（预览） |
+| `!!title import confirm` | 确认导入 |
+
+## 游戏内交互
+
+- 称号列表以**实际颜色和加粗**效果预览，所见即所得
+- 称号名可**点击**直接佩戴，佩戴中的称号显示 `[解除]` 按钮
+- 鼠标**悬停**显示操作提示
+- 管理员 `show all` 中点击称号名可跳转查看拥有者
+
+## 数据文件
+
+数据存储在 `/config/title_manager/` 目录下。
+
+### `title.json` — 称号定义
 
 ```json
 [
   {
-    "id": "1", /* 称号id */
-    "name": "[星期六] ", /* 称号显示的名字，名字后加个空格 */
-    "color": "red", /* 称号颜色 */
-    "bold": "true" /* 是否加粗 */
+    "id": "1",
+    "name": "[星期六] ",
+    "color": "red",
+    "bold": "true"
   }
 ]
 ```
 
-​	上面的配置等效于：/team modify 1 prefix {"text":"[星期六] ","color":"red","bold":true} 显示效果为：![titleEG](/title_plugin/img/titleEG.png)
+> 称号 `name` 末尾的空格用于与玩家名分隔，插件会自动在 Team 前缀中补全。
 
-​	```	/team modify 称号id prefix {"text":"称号名字","color":"称号颜色","bold":是否加粗}```
+等效命令：
 
-##### 2. ```/config/playerTitleData.json``` 存储玩家的称号所属信息
+```
+/team modify 1 prefix {"text":"[星期六] ","color":"red","bold":true}
+```
+
+效果：![titleEG](/title_plugin/img/titleEG.png)
+
+### `playerTitleData.json` — 玩家与称号的关联
 
 ```json
 [
-  {
-    "playerName":"playerNameA",
-    "titleId":"1"
-  },
-  {
-    "playerName":"playerNameA",
-    "titleId":"2"
-  },
-  {
-    "playerName":"playerNameB",
-    "titleId":"2"
-  }
+  { "playerName": "Steve", "titleId": "1" },
+  { "playerName": "Steve", "titleId": "2" },
+  { "playerName": "Alex",  "titleId": "2" }
 ]
 ```
 
+### `wearingTitle.json` — 当前佩戴状态
 
+```json
+{
+  "Steve": "1",
+  "Alex": "2"
+}
+```
+
+## Excel 导入导出
+
+`!!title export` 导出数据到插件目录下的 `title_data_export.xlsx`，包含三个 Sheet：
+
+| Sheet | 列 | 说明 |
+|---|---|---|
+| 称号 | 称号ID / 名称 / 颜色 / 加粗 | 所有称号定义 |
+| 玩家称号 | 玩家名 / 称号ID | 玩家与称号关联 |
+| 佩戴状态 | 玩家名 / 佩戴称号ID | 当前佩戴状态 |
+
+**导入流程：**
+
+1. 将 Excel 文件放到插件数据目录，命名为 `title_data_export.xlsx`
+2. 执行 `!!title import` 预览数据量
+3. 确认后执行 `!!title import confirm` 完成导入
+
+> [!WARNING]
+> 导入会**覆盖**当前所有数据，请先 `!!title export` 备份。
+
+## Name Handler 适配
 
 > [!IMPORTANT]
-> ##### 在应用此插件前，最好将该服内所有的team信息清除，以防冲突
-
-> [!IMPORTANT]
-> ##### 此插件由于修改了玩家名称格式，所以不能被默认的 ```vanilla_handler``` 处理，需要手动改修改适配
+> 本插件通过修改 Team 前缀改变玩家名显示格式，默认的 `vanilla_handler` 无法正确解析，需配合以下 Handler 使用：
 
 ```python
 import re
@@ -86,7 +130,7 @@ class MyHandler(VanillaHandler):
 
     def pre_parse_server_stdout(self, text: str):
         text = super().pre_parse_server_stdout(text)
-        # 去掉第三个[任意字符]（空格） 主要修改了下面这一行
+        # 去掉第三个 [xxx]（称号前缀），保留前两个
         text = re.sub(
             r'^(.*?\[[^]]+\].*?\[[^]]+\].*?)\[[^]]+\]\s+',
             r'\1',
@@ -108,5 +152,5 @@ def on_load(server, prev_module):
     server.register_server_handler(MyHandler())
 ```
 
-
-
+> [!IMPORTANT]
+> 启用本插件前，建议清除服务器内所有已有 Team，避免冲突。

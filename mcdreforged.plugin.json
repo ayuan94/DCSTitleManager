@@ -6,6 +6,6 @@
 	"author": "DCS",
 	"link": "https://github.com/ayuan94/DCSTitleManager",
 	"dependencies": {
-		"mcdreforged": "~2.14.0"
+		"mcdreforged": ">=2.14.0"
 	}
 }
