@@ -1,6 +1,6 @@
  {
 	"id": "title_manager",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"name": "DCS Title Manager",
 	"description": "DCSTitleManager 称号管理插件，方便玩家能自行修改佩戴的称号",
 	"author": "DCS",
